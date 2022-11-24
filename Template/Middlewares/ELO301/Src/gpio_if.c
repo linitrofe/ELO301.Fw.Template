@@ -66,7 +66,7 @@ void gpio_if_init( t_gpio_if *gpio_if, t_gpio_active active, t_gpio_pin *pin, t_
 t_gpio_if_status gpio_if_open(t_gpio_if *gpio_if)
 {
   /* Sanity check */
-  if (gpio_if->pin != NULL)
+  if (gpio_if->pin == NULL)
   {
     return GPIO_IF_OPEN_FAILURE;
   }
@@ -74,7 +74,14 @@ t_gpio_if_status gpio_if_open(t_gpio_if *gpio_if)
   /* Init variables */
 
   /* Start peripherals */
-
+  if (gpio_if->initial_state == GPIO_IF_SET)
+  {
+    gpio_if_set(gpio_if);
+  }
+  else
+  {
+    gpio_if_clear(gpio_if);
+  }
 
   return GPIO_IF_SUCCESS;
 }

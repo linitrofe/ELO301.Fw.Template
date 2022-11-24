@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 #include "gpio_if.h"
 
 /* USER CODE END Includes */
@@ -34,6 +35,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define TX_TIMEOUT_MS  100   /**< Transmission time timeout over UART */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -97,7 +100,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   /* Init custom GPIO */
-  gpio_if_init(&user_led, ACTIVE_HIGH, &user_led_pin);
+  gpio_if_init(&user_led, ACTIVE_HIGH, &user_led_pin, GPIO_IF_CLEAR);
   if (gpio_if_open(&user_led) != GPIO_IF_SUCCESS)
   {
     Error_Handler();
@@ -105,6 +108,13 @@ int main(void)
 
   while (1)
   {
+    /* Blink user LED */
+    gpio_if_toggle(&user_led);
+    HAL_Delay(500);
+
+    /* Print message */
+    printf("Hello world!!!\r\n");
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -162,6 +172,23 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+ * @brief Function that bridges HAL with printf
+ * @param file Not in use
+ * @param ptr Pointer to data to be printed out
+ * @param len Length of the data to be printed out
+ * @return len
+ */
+int _write(int file, char *ptr, int len)
+{
+  if (HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, TX_TIMEOUT_MS) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  return len;
+}
 
 /* USER CODE END 4 */
 
