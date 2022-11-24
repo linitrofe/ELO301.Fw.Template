@@ -29,4 +29,36 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Middlewares</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ELO301</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ELO301/Inc</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ELO301/Src</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ELO301/Inc/gpio_if.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/GIT.Personal/ELO301.Fw.Template/Template/Middlewares/ELO301/Inc/gpio_if.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ELO301/Src/gpio_if.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/GIT.Personal/ELO301.Fw.Template/Template/Middlewares/ELO301/Src/gpio_if.c</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
