@@ -58,7 +58,7 @@
 		<link>
 			<name>Middlewares/ELO301/Src/gpio_if.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/GIT.Personal/ELO301.Fw.Template/Template/Middlewares/ELO301/Src/gpio_if.c</locationURI>
+			<locationURI>$%7BPROJECT_LOC%7D/Middlewares/ELO301/Src/gpio_if.c</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
