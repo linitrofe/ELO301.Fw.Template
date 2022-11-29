@@ -3,7 +3,7 @@
   <FileVersion>3.0</FileVersion>
   <Workspace>
     <WorkspaceType>Single-project</WorkspaceType>
-    <WorkspacePath>C:\Users\Alvaro Aguirre\STM32CubeIDE\workspace_1.10.1\Template\</WorkspacePath>
+    <WorkspacePath>C:\GIT.Personal\ELO301.Fw.Template\Template\</WorkspacePath>
     <underRoot>true</underRoot>
     <TrustZone>0</TrustZone>
     <HAL_Driver>C:\Users\Alvaro Aguirre\STM32Cube\Repository\STM32Cube_FW_L4_V1.17.2</HAL_Driver>

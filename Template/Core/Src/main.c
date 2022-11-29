@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -25,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "gpio_if.h"
+#include "adc_if.h"
 
 /* USER CODE END Includes */
 
@@ -36,6 +38,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TX_TIMEOUT_MS  100   /**< Transmission time timeout over UART */
+#define DELAY_MS       1000   /**< Delay timeout */
 
 /* USER CODE END PD */
 
@@ -70,6 +73,8 @@ int main(void)
   /* USER CODE BEGIN 1 */
   t_gpio_pin user_led_pin = {LD4_GPIO_Port, LD4_Pin};
   t_gpio_if user_led;
+  t_adc_if potentiometer;
+  uint16_t adc_value;
 
   /* USER CODE END 1 */
 
@@ -92,6 +97,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -106,14 +112,28 @@ int main(void)
     Error_Handler();
   }
 
+  /* Init custom ADC */
+  adc_if_init(&potentiometer, &hadc1);
+  if (adc_if_open(&potentiometer) != ADC_IF_SUCCESS)
+  {
+    Error_Handler();
+  }
+
+  /* Welcome message */
+  printf("ELO301 Demo Init\r\n");
+
   while (1)
   {
     /* Blink user LED */
     gpio_if_toggle(&user_led);
-    HAL_Delay(500);
+    if (adc_if_get_value(&potentiometer, &adc_value) != ADC_IF_SUCCESS)
+    {
+      Error_Handler();
+    }
+    HAL_Delay(DELAY_MS);
 
     /* Print message */
-    printf("Hello world!!!\r\n");
+    printf("ADC: %u\r\n", adc_value);
 
     /* USER CODE END WHILE */
 

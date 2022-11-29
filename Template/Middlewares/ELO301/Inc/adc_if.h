@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
- * @file    gpio_if.h
+ * @file    adc_if.h
  * @author  ELO301
- * @date    Nov 24, 2022
+ * @date    Nov 28, 2022
  * @brief   
  *
  * 
@@ -33,8 +33,8 @@
  *
  ******************************************************************************
  */
-#ifndef _GPIO_IF_H_
-#define _GPIO_IF_H_
+#ifndef _SRC_ADC_IF_H_
+#define _SRC_ADC_IF_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,84 +42,52 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "gpio.h"
+#include "adc.h"
 
 /*- PRIVATE_Definitions ------------------------------------------------------*/
 
 /*- PRIVATE_Types ------------------------------------------------------------*/
-
 /**
- *
+ * 
  */
-typedef enum
-{
-  ACTIVE_LOW, /**< Pin active when the ouput is low */
-  ACTIVE_HIGH,/**< Pin active when the ouput is high */
-} t_gpio_active;
-
-typedef enum
-{
-  GPIO_IF_SET,
-  GPIO_IF_CLEAR,
-} t_gpio_state;
-
 typedef struct
 {
-    GPIO_TypeDef *port;
-    uint16_t pin;
-} t_gpio_pin;
+    ADC_HandleTypeDef *hadc;
+} t_adc_if;
 
-typedef struct
-{
-    t_gpio_active active;
-    t_gpio_pin *pin;
-    t_gpio_state initial_state;
-} t_gpio_if;
 
 typedef enum
 {
-  GPIO_IF_SUCCESS,			    /**< */
-  GPIO_IF_OPEN_FAILURE,     /**< */
-} t_gpio_if_status;
+  ADC_IF_SUCCESS,			/**< */
+  ADC_IF_OPEN_FAILURE,     /**< */
+  ADC_IF_GET_VALUE_FAILURE,
+} t_adc_if_status;
 
 /*- PUBLIC_API ---------------------------------------------------------------*/
 
 /**
- * @brief Init gpio_if data structure
- * @param gpio_if Pointer to gpio_if data structure
- * @param active Pin active mode
- * @param pin Pointer to pin data structure
- * @param initial_state State of the pin after init
+ * @brief Init adc_if data structure
+ * @param adc_if Pointer to adc_if data structure
  */
-void gpio_if_init( t_gpio_if *gpio_if, t_gpio_active active, t_gpio_pin *pin, t_gpio_state initial_state );
+void adc_if_init(t_adc_if *adc_if, ADC_HandleTypeDef *hadc);
 
 /**
- * @brief Open the gpio_if driver
- * @param gpio_if Pointer to gpio_if data structure
- * @return GPIO_IF_SUCCESS, GPIO_IF_OPEN_FAILURE otherwise
+ * @brief Open the adc_if driver
+ * @param adc_if Pointer to adc_if data structure
+ * @return ADC_IF_SUCCESS, ADC_IF_OPEN_FAILURE otherwise
  */
-t_gpio_if_status gpio_if_open(t_gpio_if *gpio_if);
+t_adc_if_status adc_if_open(t_adc_if *adc_if);
 
 /**
- * @brief Set the pin
- * @param gpio_if Pointer to gpio_if data structure
+ * @brief Capture ADC value
+ * @param adc_if Pointer to adc_if data structure
+ * @param value Pointer to data storage
+ * @return ADC_IF_SUCCESS, ADC_IF_GET_VALUE otherwise
  */
-void gpio_if_set(t_gpio_if *gpio_if);
-
-/**
- * @brief Clear the pin
- * @param gpio_if Pointer to gpio_if data structure
- */
-void gpio_if_clear(t_gpio_if *gpio_if);
-
-/**
- * @brief Toggle the pin
- * @param gpio_if Pointer to gpio_if data structure
- */
-void gpio_if_toggle(t_gpio_if *gpio_if);
+t_adc_if_status adc_if_get_value(t_adc_if *adc_if, uint16_t *value);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif   // _GPIO_IF_H_
+#endif   // _SRC_ADC_IF_H_
