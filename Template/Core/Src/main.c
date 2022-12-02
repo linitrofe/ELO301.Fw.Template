@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -27,6 +28,7 @@
 #include <stdio.h>
 #include "gpio_if.h"
 #include "adc_if.h"
+#include "pwm.h"
 
 /* USER CODE END Includes */
 
@@ -38,7 +40,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TX_TIMEOUT_MS  100   /**< Transmission time timeout over UART */
-#define DELAY_MS       1000   /**< Delay timeout */
+#define DELAY_MS       100   /**< Delay timeout */
 
 /* USER CODE END PD */
 
@@ -71,10 +73,13 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+#if 0
   t_gpio_pin user_led_pin = {LD4_GPIO_Port, LD4_Pin};
   t_gpio_if user_led;
+#endif
   t_adc_if potentiometer;
-  uint16_t adc_value;
+  t_pwm pwm;
+  uint8_t adc_rate;
 
   /* USER CODE END 1 */
 
@@ -98,6 +103,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -106,15 +112,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   /* Init custom GPIO */
+#if 0
   gpio_if_init(&user_led, ACTIVE_HIGH, &user_led_pin, GPIO_IF_CLEAR);
   if (gpio_if_open(&user_led) != GPIO_IF_SUCCESS)
   {
     Error_Handler();
   }
+#endif
 
   /* Init custom ADC */
   adc_if_init(&potentiometer, &hadc1);
   if (adc_if_open(&potentiometer) != ADC_IF_SUCCESS)
+  {
+    Error_Handler();
+  }
+
+  /* Init PWM */
+  pwm_init(&pwm, &htim2, TIM_CHANNEL_1, COUNTER_PERIOD_VALUE);
+  if (pwm_open(&pwm) != PWM_SUCCESS)
   {
     Error_Handler();
   }
@@ -124,16 +139,19 @@ int main(void)
 
   while (1)
   {
+#if 0
     /* Blink user LED */
     gpio_if_toggle(&user_led);
-    if (adc_if_get_value(&potentiometer, &adc_value) != ADC_IF_SUCCESS)
+#endif
+    if (adc_if_get_rate(&potentiometer, &adc_rate) != ADC_IF_SUCCESS)
     {
       Error_Handler();
     }
+    pwm_update(&pwm, adc_rate);
     HAL_Delay(DELAY_MS);
 
     /* Print message */
-    printf("ADC: %u\r\n", adc_value);
+    printf("ADC: %u\r\n", adc_rate);
 
     /* USER CODE END WHILE */
 

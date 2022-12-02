@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
- * @file    adc_if.h
+ * @file    pwm.h
  * @author  ELO301
- * @date    Nov 28, 2022
+ * @date    Dec 1, 2022
  * @brief   
  *
  * 
@@ -33,8 +33,8 @@
  *
  ******************************************************************************
  */
-#ifndef _SRC_ADC_IF_H_
-#define _SRC_ADC_IF_H_
+#ifndef _ELO301_INC_PWM_H_
+#define _ELO301_INC_PWM_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +42,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "adc.h"
+#include "tim.h"
 
 /*- PRIVATE_Definitions ------------------------------------------------------*/
 
@@ -52,51 +52,47 @@ extern "C" {
  */
 typedef struct
 {
-    ADC_HandleTypeDef *hadc;
-} t_adc_if;
+    TIM_HandleTypeDef *tim;
+    uint32_t channel;
+    uint16_t counter_period_value;
+} t_pwm;
 
 
 typedef enum
 {
-  ADC_IF_SUCCESS,			/**< */
-  ADC_IF_OPEN_FAILURE,     /**< */
-  ADC_IF_GET_VALUE_FAILURE,
-  ADC_IF_GET_RATE_FAILURE,
-} t_adc_if_status;
+  PWM_SUCCESS,			/**< */
+  PWM_OPEN_FAILURE,     /**< */
+  PWM_UPDATE_FAILURE
+} t_pwm_status;
 
 /*- PUBLIC_API ---------------------------------------------------------------*/
 
 /**
- * @brief Init adc_if data structure
- * @param adc_if Pointer to adc_if data structure
+ * @brief Init pwm data structure
+ * @param pwm Pointer to pwm data structure
+ * @param tim Timer data structure pointer
+ * @param channel Timer channel for PWM
+ * @param counter_period_value Counter period of the timer
  */
-void adc_if_init(t_adc_if *adc_if, ADC_HandleTypeDef *hadc);
+void pwm_init(t_pwm *pwm, TIM_HandleTypeDef *tim, uint32_t channel, uint16_t counter_period_value);
 
 /**
- * @brief Open the adc_if driver
- * @param adc_if Pointer to adc_if data structure
- * @return ADC_IF_SUCCESS, ADC_IF_OPEN_FAILURE otherwise
+ * @brief Open the pwm driver
+ * @param pwm Pointer to pwm data structure
+ * @return PWM_SUCCESS, PWM_OPEN_FAILURE otherwise
  */
-t_adc_if_status adc_if_open(t_adc_if *adc_if);
+t_pwm_status pwm_open(t_pwm *pwm);
 
 /**
- * @brief Capture ADC value
- * @param adc_if Pointer to adc_if data structure
- * @param value Pointer to data storage
- * @return ADC_IF_SUCCESS, ADC_IF_GET_VALUE otherwise
+ * Update PWM value
+ * @param pwm Pointer to pwm data structure
+ * @param rate from 0 to 100 percent
+ * @return PWM_SUCCESS, PWM_UPDATE_FAILURE otherwise
  */
-t_adc_if_status adc_if_get_value(t_adc_if *adc_if, uint16_t *value);
-
-/**
- * @brief Capture ADC rate
- * @param adc_if Pointer to adc_if data structure
- * @param value Pointer to data storage
- * @return ADC_IF_SUCCESS, ADC_IF_GET_VALUE otherwise
- */
-t_adc_if_status adc_if_get_rate(t_adc_if *adc_if, uint8_t *rate);
+t_pwm_status pwm_update(t_pwm *pwm, uint8_t rate);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif   // _SRC_ADC_IF_H_
+#endif   // _ELO301_INC_PWM_H_

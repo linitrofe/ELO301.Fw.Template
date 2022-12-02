@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
- * @file    adc_if.h
+ * @file    pwm.c
  * @author  ELO301
- * @date    Nov 28, 2022
+ * @date    Dec 1, 2022
  * @brief   
  *
  * 
@@ -33,70 +33,65 @@
  *
  ******************************************************************************
  */
-#ifndef _SRC_ADC_IF_H_
-#define _SRC_ADC_IF_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdlib.h>
+#include "pwm.h"
 
-#include <stdbool.h>
-#include <stdint.h>
-#include "adc.h"
+/*- PRIVATE_TUNABLES ---------------------------------------------------------*/
 
 /*- PRIVATE_Definitions ------------------------------------------------------*/
 
+/*- PRIVATE_Macros -----------------------------------------------------------*/
+
 /*- PRIVATE_Types ------------------------------------------------------------*/
-/**
- * 
- */
-typedef struct
-{
-    ADC_HandleTypeDef *hadc;
-} t_adc_if;
 
+/*- PRIVATE_Functions --------------------------------------------------------*/
 
-typedef enum
-{
-  ADC_IF_SUCCESS,			/**< */
-  ADC_IF_OPEN_FAILURE,     /**< */
-  ADC_IF_GET_VALUE_FAILURE,
-  ADC_IF_GET_RATE_FAILURE,
-} t_adc_if_status;
+/*- PRIVATE_Data -------------------------------------------------------------*/
 
 /*- PUBLIC_API ---------------------------------------------------------------*/
-
-/**
- * @brief Init adc_if data structure
- * @param adc_if Pointer to adc_if data structure
+/*
+ * API: pwm_init
  */
-void adc_if_init(t_adc_if *adc_if, ADC_HandleTypeDef *hadc);
-
-/**
- * @brief Open the adc_if driver
- * @param adc_if Pointer to adc_if data structure
- * @return ADC_IF_SUCCESS, ADC_IF_OPEN_FAILURE otherwise
- */
-t_adc_if_status adc_if_open(t_adc_if *adc_if);
-
-/**
- * @brief Capture ADC value
- * @param adc_if Pointer to adc_if data structure
- * @param value Pointer to data storage
- * @return ADC_IF_SUCCESS, ADC_IF_GET_VALUE otherwise
- */
-t_adc_if_status adc_if_get_value(t_adc_if *adc_if, uint16_t *value);
-
-/**
- * @brief Capture ADC rate
- * @param adc_if Pointer to adc_if data structure
- * @param value Pointer to data storage
- * @return ADC_IF_SUCCESS, ADC_IF_GET_VALUE otherwise
- */
-t_adc_if_status adc_if_get_rate(t_adc_if *adc_if, uint8_t *rate);
-
-#ifdef __cplusplus
+void pwm_init(t_pwm *pwm, TIM_HandleTypeDef *tim, uint32_t channel, uint16_t counter_period_value)
+{
+  pwm->tim = tim;
+  pwm->channel = channel;
+  pwm->counter_period_value = counter_period_value;
 }
-#endif
 
-#endif   // _SRC_ADC_IF_H_
+/*
+ * API: pwm_open
+ */
+t_pwm_status pwm_open(t_pwm *pwm)
+{
+  /* Sanity check */
+  if (pwm->tim == NULL)
+  {
+    return PWM_OPEN_FAILURE;
+  }
+
+  /* Init variables */
+
+  /* Start peripherals */
+  HAL_TIM_PWM_Start(pwm->tim, pwm->channel);
+
+  return PWM_SUCCESS;
+}
+
+t_pwm_status pwm_update(t_pwm *pwm, uint8_t rate)
+{
+  uint16_t pwm_value;
+
+  if (rate > 100)
+  {
+    return PWM_UPDATE_FAILURE;
+  }
+
+  pwm_value = ((uint32_t)rate * pwm->counter_period_value) / 100UL;
+  __HAL_TIM_SET_COMPARE(pwm->tim, pwm->channel, pwm_value);
+
+  return PWM_SUCCESS;
+}
+
+/*- PRIVATE_Functions --------------------------------------------------------*/

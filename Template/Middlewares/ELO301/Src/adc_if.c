@@ -41,6 +41,7 @@
 #define ADC_TIMEOUT_MS  100
 
 /*- PRIVATE_Definitions ------------------------------------------------------*/
+#define ADC_FULL_RANGE_VALUE  4096UL
 
 /*- PRIVATE_Macros -----------------------------------------------------------*/
 
@@ -98,5 +99,23 @@ t_adc_if_status adc_if_get_value(t_adc_if *adc_if, uint16_t *value)
 
   return ADC_IF_SUCCESS;
 }
+
+/*
+ * API: adc_if_get_rate
+ */
+t_adc_if_status adc_if_get_rate(t_adc_if *adc_if, uint8_t *rate)
+{
+  uint16_t value;
+
+  if (adc_if_get_value(adc_if, &value) != ADC_IF_SUCCESS)
+  {
+    return ADC_IF_GET_RATE_FAILURE;
+  }
+
+  *rate = ((uint32_t)value * 100UL) / ADC_FULL_RANGE_VALUE;
+
+  return ADC_IF_SUCCESS;
+}
+
 
 /*- PRIVATE_Functions --------------------------------------------------------*/
