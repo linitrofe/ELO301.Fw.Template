@@ -59,8 +59,9 @@ typedef enum
 
 typedef enum
 {
-  GPIO_IF_SET,
   GPIO_IF_CLEAR,
+  GPIO_IF_SET,
+  GPIO_IF_INPUT,
 } t_gpio_state;
 
 typedef struct
@@ -117,6 +118,13 @@ void gpio_if_clear(t_gpio_if *gpio_if);
  * @param gpio_if Pointer to gpio_if data structure
  */
 void gpio_if_toggle(t_gpio_if *gpio_if);
+
+/**
+ * Get pin status
+ * @param gpio_if Pointer to gpio_if data structure
+ * @return GPIO_IF_SET or GPIO_IF_GET
+ */
+t_gpio_state gpio_if_get(t_gpio_if *gpio_if);
 
 #ifdef __cplusplus
 }

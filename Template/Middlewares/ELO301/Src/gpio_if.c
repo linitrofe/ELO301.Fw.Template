@@ -78,9 +78,13 @@ t_gpio_if_status gpio_if_open(t_gpio_if *gpio_if)
   {
     gpio_if_set(gpio_if);
   }
-  else
+  else if (gpio_if->initial_state == GPIO_IF_CLEAR)
   {
     gpio_if_clear(gpio_if);
+  }
+  else
+  {
+    /* Nothing to do */
   }
 
   return GPIO_IF_SUCCESS;
@@ -123,5 +127,35 @@ void gpio_if_toggle(t_gpio_if *gpio_if)
 {
   HAL_GPIO_TogglePin(gpio_if->pin->port, gpio_if->pin->pin);
 }
+
+/*
+ * API: gpio_if_get
+ */
+t_gpio_state gpio_if_get(t_gpio_if *gpio_if)
+{
+  if (gpio_if->active == ACTIVE_HIGH)
+  {
+    if (HAL_GPIO_ReadPin(gpio_if->pin->port, gpio_if->pin->pin) == GPIO_PIN_SET)
+    {
+      return GPIO_IF_SET;
+    }
+    else
+    {
+      return GPIO_IF_CLEAR;
+    }
+  }
+  else
+  {
+    if (HAL_GPIO_ReadPin(gpio_if->pin->port, gpio_if->pin->pin) == GPIO_PIN_SET)
+    {
+      return GPIO_IF_CLEAR;
+    }
+    else
+    {
+      return GPIO_IF_SET;
+    }
+  }
+}
+
 
 /*- PRIVATE_Functions --------------------------------------------------------*/

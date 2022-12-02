@@ -77,6 +77,8 @@ int main(void)
   t_gpio_pin user_led_pin = {LD4_GPIO_Port, LD4_Pin};
   t_gpio_if user_led;
 #endif
+  t_gpio_pin user_button_pin = {B1_GPIO_Port, B1_Pin};
+  t_gpio_if user_button;
   t_adc_if potentiometer;
   t_pwm pwm;
   uint8_t adc_rate;
@@ -119,6 +121,11 @@ int main(void)
     Error_Handler();
   }
 #endif
+  gpio_if_init(&user_button, ACTIVE_LOW, &user_button_pin, GPIO_IF_INPUT);
+  if (gpio_if_open(&user_button) != GPIO_IF_SUCCESS)
+  {
+    Error_Handler();
+  }
 
   /* Init custom ADC */
   adc_if_init(&potentiometer, &hadc1);
@@ -151,7 +158,7 @@ int main(void)
     HAL_Delay(DELAY_MS);
 
     /* Print message */
-    printf("ADC: %u\r\n", adc_rate);
+    printf("Button: %u\r\n", gpio_if_get(&user_button));
 
     /* USER CODE END WHILE */
 
