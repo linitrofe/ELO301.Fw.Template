@@ -41,6 +41,7 @@
 /* USER CODE BEGIN PD */
 #define TX_TIMEOUT_MS  100   /**< Transmission time timeout over UART */
 #define DELAY_MS       100   /**< Delay timeout */
+#define GPIO_LD2_ENABLED 0 /**< Use LD2 as GPIO driven LED. It needs special config in IOC */
 
 /* USER CODE END PD */
 
@@ -73,7 +74,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-#if 0
+#if GPIO_LD2_ENABLED
   t_gpio_pin user_led_pin = {LD4_GPIO_Port, LD4_Pin};
   t_gpio_if user_led;
 #endif
@@ -114,7 +115,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   /* Init custom GPIO */
-#if 0
+#if GPIO_LD2_ENABLED
   gpio_if_init(&user_led, ACTIVE_HIGH, &user_led_pin, GPIO_IF_CLEAR);
   if (gpio_if_open(&user_led) != GPIO_IF_SUCCESS)
   {
@@ -146,7 +147,7 @@ int main(void)
 
   while (1)
   {
-#if 0
+#if GPIO_LD2_ENABLED
     /* Blink user LED */
     gpio_if_toggle(&user_led);
 #endif

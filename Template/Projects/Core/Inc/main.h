@@ -57,8 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define PRESCALER_VALUE (80-1)
-#define COUNTER_PERIOD_VALUE (100-1)
+#define PRESCALER_VALUE (800-1)
+#define COUNTER_PERIOD_VALUE (10000-1)
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
 #define USART_TX_Pin GPIO_PIN_2
