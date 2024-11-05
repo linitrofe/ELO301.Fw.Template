@@ -19,12 +19,10 @@
 /* FOO */
 
 /* USER CODE END Header */
-
-/* BAR */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -35,6 +33,7 @@
 #include "gpio_if.h"
 #include "adc_if.h"
 #include "pwm.h"
+#include "lsm6ds3.h"
 
 /* USER CODE END Includes */
 
@@ -113,6 +112,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_ADC1_Init();
   MX_TIM2_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -148,6 +148,8 @@ int main(void)
     Error_Handler();
   }
 
+  lsm6ds3_init();
+
   /* Welcome message */
   printf("ELO301 Demo Init\r\n");
 
@@ -166,6 +168,13 @@ int main(void)
 
     /* Print message */
     printf("Button: %u\r\n", gpio_if_get(&user_button));
+
+    /* Read LSM6DS3 driver */
+    if (lsm6ds3_update())
+    {
+      printf( "LSM6DS3 updated\r\n" );
+    }
+
 
     /* USER CODE END WHILE */
 
