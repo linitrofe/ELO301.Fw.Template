@@ -45,8 +45,7 @@ extern "C" {
 
 /*- USER_Definitions ------------------------------------------------------*/
 #define LSM6DS3_I2C_ADDR    0x6A
-#define LSM6DS3_WHO_AM_I    0x69
-
+#define LSM6DS3_WHO_AM_I    0x0F
 /*- PRIVATE_Definitions ------------------------------------------------------*/
 
 

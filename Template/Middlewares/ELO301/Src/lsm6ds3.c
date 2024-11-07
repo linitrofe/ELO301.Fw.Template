@@ -62,7 +62,7 @@ void lsm6ds3_init(void)
   HAL_StatusTypeDef status;
 
   /* Test I2C interface by reading known value (WHO AM I) using HAL interface */
-  status = HAL_I2C_Mem_Read(&hi2c1, LSM6DS3_I2C_ADDR, LSM6DS3_WHO_AM_I, 1, &who_am_i, 1, TIMEOUT_100MS);
+  status = HAL_I2C_Mem_Read(&hi2c1, LSM6DS3_I2C_ADDR << 1, LSM6DS3_WHO_AM_I, 1, &who_am_i, 1, TIMEOUT_100MS);
   if (status != HAL_OK)
   {
     /* I2C error */
