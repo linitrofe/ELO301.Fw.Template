@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -87,7 +87,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USB_Device_Init();
+  //MX_USB_Device_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -97,6 +97,7 @@ int main(void)
   while (1)
   {
     HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    //printf("Hello from STM32!\r\n");
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
@@ -153,6 +154,21 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/*
+ * @brief Retargets the C library printf function to the USB CDC.
+ * @param file: File descriptor.
+ * @param data: Pointer to data buffer.
+ * @param len: Length of data.
+ * @return Number of bytes written.
+ */
+int _write(int file, char *data, int len)
+{
+  /* Send data over USB CDC */
+  CDC_Transmit_FS((uint8_t*)data, len);
+
+  return len;
+}
 
 /* USER CODE END 4 */
 

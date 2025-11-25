@@ -1,5 +1,5 @@
 Drivers/CMSIS/system_stm32g0xx.o: \
- C:/Git.Personal/ELO301/Fw/Test_G0/Core/Src/system_stm32g0xx.c \
+ C://Git.Personal/ELO301/2023.Fw/Template_ELOBoard/Core/Src/system_stm32g0xx.c \
  ../../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h \
  ../../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0b1xx.h \
  ../../Drivers/CMSIS/Include/core_cm0plus.h \
@@ -25,6 +25,9 @@ Drivers/CMSIS/system_stm32g0xx.o: \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_exti.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_usb.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd_ex.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h
 ../../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h:
@@ -52,5 +55,8 @@ Drivers/CMSIS/system_stm32g0xx.o: \
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_exti.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_usb.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd_ex.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h:

@@ -24,6 +24,9 @@ C_DEPS :=
 SUBDIRS := \
 Application/User/Core \
 Application/User/Startup \
+Application/User/USB_Device/App \
+Application/User/USB_Device/Target \
 Drivers/CMSIS \
 Drivers/STM32G0xx_HAL_Driver \
+Middlewares/USB_Device_Library \
 

@@ -1,5 +1,6 @@
 Application/User/Core/main.o: \
- C:/Git.Personal/ELO301/Fw/Test_G0/Core/Src/main.c ../../Core/Inc/main.h \
+ C://Git.Personal/ELO301/2023.Fw/Template_ELOBoard/Core/Src/main.c \
+ ../../Core/Inc/main.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h \
  ../../Core/Inc/stm32g0xx_hal_conf.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h \
@@ -25,9 +26,21 @@ Application/User/Core/main.o: \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_exti.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_usb.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd_ex.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h \
- ../../Core/Inc/gpio.h ../../Core/Inc/main.h
+ ../../USB_Device/App/usb_device.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
+ ../../USB_Device/Target/usbd_conf.h ../../Core/Inc/gpio.h \
+ ../../Core/Inc/main.h ../../USB_Device/App/usbd_cdc_if.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
+ ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
 ../../Core/Inc/main.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h:
 ../../Core/Inc/stm32g0xx_hal_conf.h:
@@ -54,7 +67,20 @@ Application/User/Core/main.o: \
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_exti.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_usb.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd_ex.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h:
+../../USB_Device/App/usb_device.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
+../../USB_Device/Target/usbd_conf.h:
 ../../Core/Inc/gpio.h:
 ../../Core/Inc/main.h:
+../../USB_Device/App/usbd_cdc_if.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
+../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:

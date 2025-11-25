@@ -1,5 +1,5 @@
 Application/User/Core/stm32g0xx_it.o: \
- C:/Git.Personal/ELO301/Fw/Test_G0/Core/Src/stm32g0xx_it.c \
+ C://Git.Personal/ELO301/2023.Fw/Template_ELOBoard/Core/Src/stm32g0xx_it.c \
  ../../Core/Inc/main.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h \
  ../../Core/Inc/stm32g0xx_hal_conf.h \
@@ -26,6 +26,9 @@ Application/User/Core/stm32g0xx_it.o: \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_exti.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_usb.h \
+ ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd_ex.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h \
  ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h \
  ../../Core/Inc/stm32g0xx_it.h
@@ -55,6 +58,9 @@ Application/User/Core/stm32g0xx_it.o: \
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_exti.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_usb.h:
+../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pcd_ex.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h:
 ../../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h:
 ../../Core/Inc/stm32g0xx_it.h:
