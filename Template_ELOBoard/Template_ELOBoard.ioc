@@ -33,6 +33,7 @@ NVIC.NonMaskableInt_IRQn=true\:0\:0\:false\:false\:true\:false\:false\:false
 NVIC.PendSV_IRQn=true\:0\:0\:false\:false\:true\:false\:false\:false
 NVIC.SVC_IRQn=true\:0\:0\:false\:false\:true\:false\:false\:true
 NVIC.SysTick_IRQn=true\:3\:0\:false\:false\:true\:false\:true\:false
+NVIC.USB_UCPD1_2_IRQn=true\:0\:0\:false\:false\:true\:true\:true\:true
 PA11\ [PA9].Mode=Device
 PA11\ [PA9].Signal=USB_DM
 PA12\ [PA10].Mode=Device
