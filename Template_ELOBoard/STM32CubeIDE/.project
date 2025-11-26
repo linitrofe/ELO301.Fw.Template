@@ -107,6 +107,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_rcc_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32G0xx_HAL_Driver/stm32g0xx_hal_uart.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_uart.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32G0xx_HAL_Driver/stm32g0xx_hal_uart_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_uart_ex.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32G0xx_HAL_Driver/stm32g0xx_ll_rcc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_rcc.c</locationURI>
@@ -155,6 +165,11 @@
 			<name>Application/User/Core/stm32g0xx_it.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/stm32g0xx_it.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/usart.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/usart.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/USB_Device/App/usb_device.c</name>

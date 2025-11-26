@@ -18,11 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <unistd.h>
+#include <sys/unistd.h>
 #include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
@@ -88,6 +91,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USB_Device_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -98,7 +102,8 @@ int main(void)
   {
     HAL_Delay(500);
     HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-    printf("Hello from STM32!\r\n");
+    printf("Hello from CDC!\r\n");
+    fprintf(stderr, "Hello from UART2!\r\n");
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -164,8 +169,22 @@ void SystemClock_Config(void)
  */
 int _write(int file, char *data, int len)
 {
-  /* Send data over USB CDC */
-  CDC_Transmit_FS((uint8_t*)data, len);
+
+  switch (file)
+  {
+    case STDOUT_FILENO: /* stdout */
+      /* Send data over USB CDC */
+      CDC_Transmit_FS((uint8_t*)data, len);
+      break;
+
+    case STDERR_FILENO: /* stderr */
+      /* Send data over huart2 */
+      HAL_UART_Transmit(&huart2, (uint8_t*)data, len, HAL_MAX_DELAY);
+      break;
+    default:
+      return -1;
+  }
+
 
   return len;
 }
