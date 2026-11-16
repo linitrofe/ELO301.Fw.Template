@@ -46,7 +46,6 @@
 /* USER CODE BEGIN PD */
 #define TX_TIMEOUT_MS  100   /**< Transmission time timeout over UART */
 #define DELAY_MS       100   /**< Delay timeout */
-#define GPIO_LD2_ENABLED 0 /**< Use LD2 as GPIO driven LED. It needs special config in IOC */
 
 /* USER CODE END PD */
 
@@ -79,14 +78,15 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-#if GPIO_LD2_ENABLED
-  t_gpio_pin user_led_pin = {LD4_GPIO_Port, LD4_Pin};
+#if GPIO_LED_ENABLED
+  t_gpio_pin user_led_pin = {LED_GPIO_Port, LED_Pin};
   t_gpio_if user_led;
+#else
+  t_pwm pwm;
 #endif
   t_gpio_pin user_button_pin = {B1_GPIO_Port, B1_Pin};
   t_gpio_if user_button;
   t_adc_if potentiometer;
-  t_pwm pwm;
   uint8_t adc_rate;
 
   /* USER CODE END 1 */
@@ -121,7 +121,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   /* Init custom GPIO */
-#if GPIO_LD2_ENABLED
+#if GPIO_LED_ENABLED == 1
   gpio_if_init(&user_led, ACTIVE_HIGH, &user_led_pin, GPIO_IF_CLEAR);
   if (gpio_if_open(&user_led) != GPIO_IF_SUCCESS)
   {
@@ -142,20 +142,24 @@ int main(void)
   }
 
   /* Init PWM */
+#if GPIO_LED_ENABLED == 0
   pwm_init(&pwm, &htim2, TIM_CHANNEL_1, COUNTER_PERIOD_VALUE);
   if (pwm_open(&pwm) != PWM_SUCCESS)
   {
     Error_Handler();
   }
+#endif
 
+#if LSM6_ENABLED == 1
   lsm6ds3_init();
+#endif
 
   /* Welcome message */
   printf("ELO301 Demo Init\r\n");
 
   while (1)
   {
-#if GPIO_LD2_ENABLED
+#if GPIO_LED_ENABLED == 1
     /* Blink user LED */
     gpio_if_toggle(&user_led);
 #endif
@@ -163,19 +167,23 @@ int main(void)
     {
       Error_Handler();
     }
+
+#if GPIO_LED_ENABLED == 0
     pwm_update(&pwm, adc_rate);
-    HAL_Delay(DELAY_MS);
+#endif
 
     /* Print message */
     printf("Button: %u\r\n", gpio_if_get(&user_button));
 
+#if LSM6_ENABLED == 1
     /* Read LSM6DS3 driver */
     if (lsm6ds3_update())
     {
       printf( "LSM6DS3 updated\r\n" );
     }
+#endif
 
-
+    HAL_Delay(DELAY_MS);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
