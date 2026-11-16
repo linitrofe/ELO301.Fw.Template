@@ -111,9 +111,11 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
-  MX_TIM2_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+#if PWM_ENABLED == 1
+  MX_TIM2_Init();
+#endif
 
   /* USER CODE END 2 */
 
@@ -121,7 +123,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   /* Init custom GPIO */
-#if GPIO_LED_ENABLED == 1
+#if PWM_ENABLED == 0
   gpio_if_init(&user_led, ACTIVE_HIGH, &user_led_pin, GPIO_IF_CLEAR);
   if (gpio_if_open(&user_led) != GPIO_IF_SUCCESS)
   {
@@ -142,7 +144,7 @@ int main(void)
   }
 
   /* Init PWM */
-#if GPIO_LED_ENABLED == 0
+#if PWM_ENABLED == 1
   pwm_init(&pwm, &htim2, TIM_CHANNEL_1, COUNTER_PERIOD_VALUE);
   if (pwm_open(&pwm) != PWM_SUCCESS)
   {
@@ -159,7 +161,7 @@ int main(void)
 
   while (1)
   {
-#if GPIO_LED_ENABLED == 1
+#if PWM_ENABLED == 0
     /* Blink user LED */
     gpio_if_toggle(&user_led);
 #endif
@@ -168,7 +170,7 @@ int main(void)
       Error_Handler();
     }
 
-#if GPIO_LED_ENABLED == 0
+#if PWM_ENABLED == 1
     pwm_update(&pwm, adc_rate);
 #endif
 
