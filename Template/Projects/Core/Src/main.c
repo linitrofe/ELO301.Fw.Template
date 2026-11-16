@@ -23,7 +23,6 @@
 #include "main.h"
 #include "adc.h"
 #include "i2c.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -39,6 +38,9 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+#if PWM_ENABLED == 1
+#include "tim.h"
+#endif
 
 /* USER CODE END PTD */
 
@@ -77,8 +79,9 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
-#if GPIO_LED_ENABLED
+#if PWM_ENABLED == 0
   t_gpio_pin user_led_pin = {LED_GPIO_Port, LED_Pin};
   t_gpio_if user_led;
 #else
@@ -115,6 +118,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
 #if PWM_ENABLED == 1
   MX_TIM2_Init();
+#else
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 #endif
 
   /* USER CODE END 2 */
@@ -214,7 +224,7 @@ void SystemClock_Config(void)
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.HSICalibrationValue = 64;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = 1;
@@ -277,8 +287,7 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
