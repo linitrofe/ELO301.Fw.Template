@@ -116,7 +116,6 @@ int main(void)
   MX_USART2_UART_Init();
   MX_ADC1_Init();
   MX_I2C1_Init();
-  MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
 #if PWM_ENABLED == 1
   MX_TIM2_Init();
