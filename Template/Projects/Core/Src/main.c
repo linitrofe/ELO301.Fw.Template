@@ -33,6 +33,7 @@
 #include "adc_if.h"
 #include "pwm.h"
 #include "lsm6ds3.h"
+#include "temperature_slave.h"
 
 /* USER CODE END Includes */
 
@@ -150,6 +151,12 @@ int main(void)
   /* Init custom ADC */
   adc_if_init(&potentiometer, &hadc1);
   if (adc_if_open(&potentiometer) != ADC_IF_SUCCESS)
+  {
+    Error_Handler();
+  }
+
+  /* Calibration must precede enabling the interrupt-only emulator. */
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
   {
     Error_Handler();
   }

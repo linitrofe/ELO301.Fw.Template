@@ -50,7 +50,7 @@ void MX_ADC1_Init(void)
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
@@ -75,14 +75,25 @@ void MX_ADC1_Init(void)
     Error_Handler();
   }
 
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  /* Injected group is independent of the potentiometer regular sequence. */
+  ADC_InjectionConfTypeDef injected = {0};
+  injected.InjectedNbrOfConversion = 2;
+  injected.InjectedSamplingTime = ADC_SAMPLETIME_640CYCLES_5;
+  injected.InjectedSingleDiff = ADC_SINGLE_ENDED;
+  injected.InjectedOffsetNumber = ADC_OFFSET_NONE;
+  injected.ExternalTrigInjecConv = ADC_INJECTED_SOFTWARE_START;
+  injected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_NONE;
+  injected.AutoInjectedConv = DISABLE;
+  injected.InjectedDiscontinuousConvMode = DISABLE;
+  injected.QueueInjectedContext = DISABLE;
+  injected.InjectedChannel = ADC_CHANNEL_TEMPSENSOR;
+  injected.InjectedRank = ADC_INJECTED_RANK_1;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &injected) != HAL_OK) Error_Handler();
+  injected.InjectedChannel = ADC_CHANNEL_VREFINT;
+  injected.InjectedRank = ADC_INJECTED_RANK_2;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &injected) != HAL_OK) Error_Handler();
+  /* HAL enables TSEN/VREFEN above. Allow startup once, outside all ISRs. */
+  HAL_Delay(1);
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
