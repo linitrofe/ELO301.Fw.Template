@@ -205,7 +205,9 @@ void SysTick_Handler(void)
 void I2C3_EV_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C3_EV_IRQn 0 */
+  /* The binary library owns I2C3 event/error flags. */
   temperature_slave_irq();
+  /* Skip HAL dispatch so the same transaction is not handled twice. */
   return;
 
   /* USER CODE END I2C3_EV_IRQn 0 */
@@ -221,7 +223,9 @@ void I2C3_EV_IRQHandler(void)
 void I2C3_ER_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C3_ER_IRQn 0 */
+  /* The binary library owns I2C3 event/error flags. */
   temperature_slave_irq();
+  /* Skip HAL dispatch so the same transaction is not handled twice. */
   return;
 
   /* USER CODE END I2C3_ER_IRQn 0 */

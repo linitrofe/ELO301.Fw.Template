@@ -135,7 +135,7 @@ int main(void)
   {
     Error_Handler();
   }
-  MX_I2C3_Init();
+  /* Library initializes I2C3 and starts the emulator. */
   temperature_slave_init();
 
   /* USER CODE END 2 */

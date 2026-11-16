@@ -55,7 +55,10 @@ extern "C" {
 /*- PRIVATE_Types ------------------------------------------------------------*/
 
 /*- PUBLIC_API ---------------------------------------------------------------*/
-/* Call after ADC calibration and MX_I2C3_Init(). No main-loop service. */
+/* Call once after system clocks, ADC configuration and ADC calibration.
+ * Initializes I2C3 (PC0=SCL, PC1=SDA, address 0x48) through the project HAL MSP.
+ * Do not call MX_I2C3_Init() separately. No main-loop service is required.
+ */
 void temperature_slave_init(void);
 
 /* Owns I2C3 EV/ER flags; do not also call HAL_I2C_*IRQHandler for I2C3. */

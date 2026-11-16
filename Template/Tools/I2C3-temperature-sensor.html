@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="NUCLEO-L452RE temperature sensor emulator: binary library, header API, I2C3 pins and register protocol."><title>Emulated temperature sensor | NUCLEO-L452RE</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f2f5f6;color:#21333e;font:17px/1.7 system-ui,-apple-system,Segoe UI,sans-serif}header{background:#103a46;color:white;padding:40px max(24px,calc((100vw - 1040px)/2))}header p{margin:0;color:#bce6df;font-size:13px;letter-spacing:.12em;text-transform:uppercase}header strong{font-size:28px;display:block;margin-top:8px}main{max-width:1088px;margin:28px auto;padding:36px 40px;background:white;border:1px solid #dbe4e7;border-radius:14px}h1{font-size:34px;line-height:1.2;margin-top:0}h2{margin-top:46px;padding-top:12px;border-top:2px solid #d9e9e7;font-size:25px}h3{margin-top:30px;font-size:20px}a{color:#086c6b;text-underline-offset:3px}nav{display:flex;gap:8px 20px;flex-wrap:wrap;padding:15px 0 25px;font-size:14px}table{width:100%;border-collapse:collapse;font-size:15px;margin:24px 0}th{text-align:left;background:#e8f3f1}td,th{padding:12px;border:1px solid #d7e2e4;vertical-align:top}code{background:#eef3f5;border-radius:4px;padding:2px 5px;font-size:.88em;overflow-wrap:anywhere}pre{background:#112f3a;color:#e6f6f2;padding:20px;border-radius:9px;overflow:auto;font-size:14px}pre code{background:transparent;padding:0;white-space:pre;overflow-wrap:normal}figure{margin:28px 0;padding:16px;background:#f8fbfb;border:1px solid #d9e6e5;border-radius:12px}svg{width:100%;height:auto;display:block}svg text{font-family:system-ui,Segoe UI,sans-serif}.box{fill:#e5f3f0;stroke:#72aaa5;stroke-width:1.5}.label{fill:#143c46;font-size:17px;font-weight:600}.sub{fill:#34545e;font-size:14px}.wire{fill:none;stroke:#207c78;stroke-width:2}.lifeline{stroke:#91aeb4;stroke-dasharray:5 5;stroke-width:1.5}figcaption{font-size:14px;line-height:1.5;color:#526a73;margin:12px 5px 0}footer{font-size:13px;color:#657d84;margin-top:36px;border-top:1px solid #dbe4e7;padding-top:18px}@media(max-width:650px){main{padding:24px 18px;margin:14px 10px}h1{font-size:29px}table{font-size:13px}td,th{padding:8px}figure{padding:5px}svg{min-width:650px}figure{overflow-x:auto}}@media print{body{background:white;font-size:11pt}header{padding:18px;color:#103a46;background:white}header p{color:#34545e}main{border:0;margin:0;padding:0;max-width:none}nav{display:none}h2,h3{break-after:avoid}figure,tr{break-inside:avoid}a{color:inherit}pre{white-space:pre-wrap}svg{min-width:0}}</style></head><body><header><p>ELO301 ? Firmware reference</p><strong>NUCLEO-L452RE</strong></header><main><nav aria-label="Sections"><a href="#sensor-pins">Sensor pins</a><a href="#the-library-and-its-public-interface">The library and its public interface</a><a href="#working-with-a-developer-api">Working with a developer API</a><a href="#firmware-integration">Firmware integration</a><a href="#using-the-sensor-through-i2c-registers">Using the sensor through I2C registers</a></nav><h1>Emulated temperature sensor: binary library and API</h1>
+<p>This project includes a temperature sensor emulator on I2C3. It uses the
+microcontroller's internal ADC temperature sensor and presents it through an
+I2C interface. The emulator has been implemented as a <strong>binary static library</strong>
+and is already integrated into the STM32CubeIDE project. The library has been
+implemented for the <strong>NUCLEO-L452RE</strong> development board, which uses the
+STM32L452RE microcontroller.</p>
+<h2 id="sensor-pins">Sensor pins</h2>
+<p>On the NUCLEO-L452RE board, the emulated sensor is available on the following
+STM32 I2C3 pins:</p>
+<table>
+<thead>
+<tr>
+<th>MCU pin</th>
+<th>I2C3 signal</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC0</td>
+<td>SCL</td>
+<td>Serial clock</td>
+</tr>
+<tr>
+<td>PC1</td>
+<td>SDA</td>
+<td>Serial data</td>
+</tr>
+</tbody>
+</table>
+<p>Both pins are configured as open-drain outputs with <strong>no internal pull-ups
+enabled</strong> (<code>GPIO_NOPULL</code>). The firmware does not provide pull-ups on PC0 or
+PC1; the connected I2C bus must provide external pull-up resistors.</p>
+<figure><svg viewBox="0 0 900 290" role="img" aria-label="I2C3 pins and external pull-ups" xmlns="http://www.w3.org/2000/svg"><title>I2C3 pins and external pull-ups</title><desc>PC0 is SCL and PC1 is SDA. External pull-ups connect both bus lines to 3.3 V; the emulator enables no internal pull-ups. Master and board share ground.</desc><defs><marker id="arrow290" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#207c78"/></marker></defs><rect x="20" y="110" width="240" height="100" rx="10" class="box"/><text x="140.0" y="141" text-anchor="middle" class="label">I2C master</text><text x="140.0" y="165" text-anchor="middle" class="sub">Shared ground with board</text><rect x="640" y="110" width="240" height="100" rx="10" class="box"/><text x="760.0" y="141" text-anchor="middle" class="label">NUCLEO-L452RE</text><text x="760.0" y="165" text-anchor="middle" class="sub">I2C3 slave: 0x48</text><path d="M260 135 H640 M260 185 H640" class="wire"/><text x="285" y="127" class="sub">SCL</text><text x="555" y="127" class="sub">PC0</text><text x="285" y="207" class="sub">SDA</text><text x="555" y="207" class="sub">PC1</text><path d="M390 135 V90 M390 90 l-6 -5 l12 -8 l-12 -8 l12 -8 l-6 -5 V35 M495 185 V90 M495 90 l-6 -5 l12 -8 l-12 -8 l12 -8 l-6 -5 V35 M370 35 H515" class="wire"/><circle cx="390" cy="135" r="4" fill="#207c78"/><circle cx="495" cy="185" r="4" fill="#207c78"/><text x="440" y="23" text-anchor="middle" class="label">3.3 V</text><text x="540" y="75" class="sub">External</text><text x="540" y="94" class="sub">pull-ups</text><text x="450" y="255" text-anchor="middle" class="label">PC0 / PC1: GPIO_NOPULL</text></svg><figcaption>PC0 is SCL and PC1 is SDA. External pull-ups connect both bus lines to 3.3 V; the emulator enables no internal pull-ups. Master and board share ground.</figcaption></figure><h2 id="the-library-and-its-public-interface">The library and its public interface</h2>
+<p>A binary library contains code that has already been compiled. In this
+project, that code is stored in a <code>.a</code> archive. During a firmware build, the
+linker takes the required code from the archive and combines it with the
+application to produce the executable firmware.</p>
+<p>The corresponding <code>.h</code> file declares the library's <strong>application programming
+interface (API)</strong>: the public functions and definitions available to application
+code. The header describes the interface; the archive supplies the compiled
+implementation. Both are part of the library integration.</p>
+<table>
+<thead>
+<tr>
+<th>Project file</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../Middlewares/ELO301/Lib/libtemperature_slave.a">libtemperature_slave.a</a></td>
+<td>Compiled implementation of the emulator.</td>
+</tr>
+<tr>
+<td><a href="../Middlewares/ELO301/Inc/temperature_slave.h">temperature_slave.h</a></td>
+<td>API reference: public definitions, function declarations, and interface comments.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Read <a href="../Middlewares/ELO301/Inc/temperature_slave.h">temperature_slave.h</a> for
+the emulator API.</strong> Its <code>USER_Definitions</code> and <code>PUBLIC_API</code> sections identify
+the public constants and entry points. Read the declarations together with
+their comments to understand the interface and its constraints.</p>
+<figure><svg viewBox="0 0 900 290" role="img" aria-label="How the header and binary library fit into a firmware build" xmlns="http://www.w3.org/2000/svg"><title>How the header and binary library fit into a firmware build</title><desc>The compiler reads the application and header; the linker combines application object code with the binary library to produce firmware.</desc><defs><marker id="arrow290" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#207c78"/></marker></defs><rect x="20" y="20" width="250" height="78" rx="10" class="box"/><text x="145.0" y="51" text-anchor="middle" class="label">Application + header</text><text x="145.0" y="75" text-anchor="middle" class="sub">temperature_slave.h</text><path d="M270,59 L320,59" class="wire" marker-end="url(#arrow290)"/><rect x="330" y="20" width="240" height="78" rx="10" class="box"/><text x="450.0" y="51" text-anchor="middle" class="label">C compiler</text><text x="450.0" y="75" text-anchor="middle" class="sub">Checks API declarations</text><path d="M450,98 L450,145" class="wire" marker-end="url(#arrow290)"/><rect x="330" y="155" width="240" height="78" rx="10" class="box"/><text x="450.0" y="186" text-anchor="middle" class="label">Linker</text><text x="450.0" y="210" text-anchor="middle" class="sub">Combines compiled code</text><rect x="20" y="155" width="250" height="78" rx="10" class="box"/><text x="145.0" y="186" text-anchor="middle" class="label">Binary library</text><text x="145.0" y="210" text-anchor="middle" class="sub">libtemperature_slave.a</text><path d="M270,194 L320,194" class="wire" marker-end="url(#arrow290)"/><path d="M570,194 L620,194" class="wire" marker-end="url(#arrow290)"/><rect x="630" y="155" width="250" height="78" rx="10" class="box"/><text x="755.0" y="186" text-anchor="middle" class="label">Firmware</text><text x="755.0" y="210" text-anchor="middle" class="sub">Runs on NUCLEO-L452RE</text></svg><figcaption>The compiler reads the application and header; the linker combines application object code with the binary library to produce firmware.</figcaption></figure><h2 id="working-with-a-developer-api">Working with a developer API</h2>
+<p>The header is written at the level used in firmware development. Function
+names, parameter lists, return types, symbolic constants, and comments are
+part of the information you are expected to interpret when reading an API.
+The manual provides orientation; the header remains the reference for the
+library interface. The register transactions below describe the I2C interface
+seen by a master; they are separate from the C API used by the firmware.</p>
+<p>CubeIDE's Debug and Release configurations link the supplied archive.
+Changing a declaration in the header does not change the binary implementation:
+the header and library must remain compatible.</p>
+<p>The archive supplied here targets the STM32L452 Cortex-M4 with the project's
+hard-float settings. It is a component of this firmware project, rather than
+an executable program that runs independently on a computer.</p>
+<h2 id="firmware-integration">Firmware integration</h2>
+<p>The project calls <code>temperature_slave_init()</code> after ADC startup and calibration.
+This library entry point initializes I2C3 and starts the emulator; the application
+does not call <code>MX_I2C3_Init()</code> separately. The project HAL MSP supplies the I2C3
+clock, pin and NVIC configuration, with no internal pull-ups on PC0 or PC1.
+Both <code>I2C3_EV_IRQHandler</code> and <code>I2C3_ER_IRQHandler</code> dispatch to the library.
+The emulator requires no main-loop service. These entry points are supplied by
+the binary library; their declarations and interface comments are in
+<a href="../Middlewares/ELO301/Inc/temperature_slave.h">temperature_slave.h</a>.</p>
+<h2 id="using-the-sensor-through-i2c-registers">Using the sensor through I2C registers</h2>
+<p>The sensor's <strong>7-bit slave address is <code>0x48</code></strong>. A logic analyzer showing full
+address bytes will display <code>0x90</code> for a write and <code>0x91</code> for a read. When a master
+API expects a 7-bit address, supply <code>0x48</code>; STM32 HAL expects that value shifted
+left by one bit (<code>0x48 &lt;&lt; 1</code>). The master must support clock stretching while
+the emulator acquires a fresh temperature sample.</p>
+<p>The reported temperature is the MCU's internal die temperature, which can
+differ from room temperature. The sensor starts with readings disabled.</p>
+<table>
+<thead>
+<tr>
+<th>Register</th>
+<th>Access</th>
+<th>Size</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x00</code></td>
+<td>Read/write</td>
+<td>1 byte</td>
+<td>Control: bit 0 enables readings (<code>1</code>) or disables them (<code>0</code>). Other bits read as zero and are ignored on writes. Reset value: <code>0x00</code>.</td>
+</tr>
+<tr>
+<td><code>0x01</code></td>
+<td>Read only</td>
+<td>2 bytes</td>
+<td>Signed temperature in hundredths of a degree Celsius, most significant byte first. <code>0x8000</code> indicates an unavailable reading.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="enable-or-disable-readings">Enable or disable readings</h3>
+<p>To enable readings, send a write to address <code>0x48</code> with the two data bytes
+<code>00 01</code>. The first byte selects the control register; the second sets its value.
+To disable readings, send <code>00 00</code> instead. Disabling readings does not remove
+the device from the bus: control reads remain available, and temperature reads
+return <code>80 00</code>.</p>
+<h3 id="read-a-register">Read a register</h3>
+<p>A register read first writes a one-byte register pointer, then reads that
+register's data. For temperature, the transaction is:</p>
+<pre><code class="language-text">START -&gt; 0x48 + WRITE -&gt; 0x01 -&gt; repeated START -&gt; 0x48 + READ
+      -&gt; temperature MSB -&gt; temperature LSB -&gt; STOP
+</code></pre>
+<p>The master ACKs the first returned byte and NACKs the second before STOP.
+For control, select <code>0x00</code> and read one byte, NACKing that byte before STOP.
+A STOP between pointer selection and the read is also supported. The pointer
+is retained, so subsequent reads can use the previously selected register.
+Each temperature read takes a fresh sample; its two bytes form one snapshot.</p>
+<figure><svg viewBox="0 0 900 510" role="img" aria-label="Temperature register read transaction" xmlns="http://www.w3.org/2000/svg"><title>Temperature register read transaction</title><desc>The master selects register 0x01, issues a repeated START, and reads two bytes. It ACKs the MSB and NACKs the LSB, then ends with STOP.</desc><defs><marker id="arrow510" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#207c78"/></marker></defs><text x="180" y="30" text-anchor="middle" class="label">Master</text><text x="720" y="30" text-anchor="middle" class="label">Emulated sensor</text><path d="M180 45 V480 M720 45 V480" class="lifeline"/><path d="M180,75 L720,75" class="wire" marker-end="url(#arrow510)"/><text x="450" y="66" text-anchor="middle" class="sub">START + address 0x48, WRITE (wire byte 0x90)</text><path d="M720,116 L180,116" class="wire" marker-end="url(#arrow510)"/><text x="450" y="107" text-anchor="middle" class="sub">ACK</text><path d="M180,157 L720,157" class="wire" marker-end="url(#arrow510)"/><text x="450" y="148" text-anchor="middle" class="sub">Register pointer: 0x01</text><path d="M720,198 L180,198" class="wire" marker-end="url(#arrow510)"/><text x="450" y="189" text-anchor="middle" class="sub">ACK</text><path d="M180,239 L720,239" class="wire" marker-end="url(#arrow510)"/><text x="450" y="230" text-anchor="middle" class="sub">Repeated START + 0x48, READ (wire byte 0x91)</text><path d="M720,280 L180,280" class="wire" marker-end="url(#arrow510)"/><text x="450" y="271" text-anchor="middle" class="sub">ACK; SCL may stretch during conversion</text><path d="M720,321 L180,321" class="wire" marker-end="url(#arrow510)"/><text x="450" y="312" text-anchor="middle" class="sub">Temperature MSB</text><path d="M180,362 L720,362" class="wire" marker-end="url(#arrow510)"/><text x="450" y="353" text-anchor="middle" class="sub">ACK</text><path d="M720,403 L180,403" class="wire" marker-end="url(#arrow510)"/><text x="450" y="394" text-anchor="middle" class="sub">Temperature LSB</text><path d="M180,444 L720,444" class="wire" marker-end="url(#arrow510)"/><text x="450" y="435" text-anchor="middle" class="sub">NACK + STOP</text></svg><figcaption>The master selects register 0x01, issues a repeated START, and reads two bytes. It ACKs the MSB and NACKs the LSB, then ends with STOP.</figcaption></figure><h3 id="decode-the-temperature">Decode the temperature</h3>
+<p>Combine the bytes as <code>(MSB &lt;&lt; 8) | LSB</code>. First check for <code>0x8000</code>: it means
+readings are disabled, a conversion failed, or the ADC is temporarily
+unavailable. Do not interpret that value as a temperature.</p>
+<p>Otherwise interpret the combined value as a signed 16-bit two's-complement
+number and divide by 100 to obtain degrees Celsius.</p>
+<table>
+<thead>
+<tr>
+<th>Returned bytes</th>
+<th>Signed value</th>
+<th>Temperature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>09 C4</code></td>
+<td>2500</td>
+<td>25.00 degrees C</td>
+</tr>
+<tr>
+<td><code>FF 9C</code></td>
+<td>-100</td>
+<td>-1.00 degrees C</td>
+</tr>
+<tr>
+<td><code>80 00</code></td>
+<td>Reserved</td>
+<td>Reading unavailable</td>
+</tr>
+</tbody>
+</table>
+<p>Registers do not auto-increment. Writes to the temperature register are ignored.
+Unknown registers return <code>FF</code>; bytes read beyond a register's defined size also
+return <code>FF</code>. An I2C transfer error is separate from the <code>80 00</code> value: the master
+must check whether the transfer succeeded before decoding the returned bytes.</p>
+<footer>Exported from I2C3-temperature-sensor.md. Diagrams are embedded; no internet connection is required.</footer></main></body></html>
