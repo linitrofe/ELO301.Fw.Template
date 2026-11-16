@@ -61,3 +61,23 @@ USART2 `printf` displays, for example, `I2C temperature: 25.00 C`.
 Missing wiring, failed transfers, and unavailable readings print diagnostic
 messages; enabling is retried after a failed transaction. The emulator itself
 continues to run entirely in interrupts. The main loop is only its I2C client.
+
+## Static library integration
+
+The emulator is linked from `Middlewares/ELO301/Lib/libtemperature_slave.a`.
+The public interface remains `Middlewares/ELO301/Inc/temperature_slave.h`.
+CubeIDE Debug and Release configurations exclude
+`Middlewares/ELO301/Src/temperature_slave.c` from compilation and link the
+`temperature_slave` library using `../../Middlewares/ELO301/Lib` as the search
+path relative to the build directory. The source is retained for maintenance.
+
+The archive was built with STM32 GCC 14.3.1, `STM32L452xx`, `USE_HAL_DRIVER`,
+`-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard`, `-O2`, and
+function/data sections, then archived with `arm-none-eabi-ar rcs`. It exports
+`temperature_slave_init` and `temperature_slave_irq`. Rebuild the archive after
+changing its implementation, device definitions, or ABI. Normal application
+builds use the supplied archive and do not rebuild it from source.
+
+Library packaging does not restore the initialization or demo code lost during
+IOC regeneration. The application still needs the proper I2C3 slave address,
+`MX_I2C3_Init()` and `temperature_slave_init()` calls to run the emulator.
