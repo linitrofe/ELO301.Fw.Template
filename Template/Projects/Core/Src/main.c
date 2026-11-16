@@ -128,6 +128,16 @@ int main(void)
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 #endif
 
+  /* Initialize the emulator library after ADC startup and calibration.
+     Keep application initialization inside CubeMX user sections. */
+  HAL_Delay(1);
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  MX_I2C3_Init();
+  temperature_slave_init();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -150,12 +160,6 @@ int main(void)
   /* Init custom ADC */
   adc_if_init(&potentiometer, &hadc1);
   if (adc_if_open(&potentiometer) != ADC_IF_SUCCESS)
-  {
-    Error_Handler();
-  }
-
-  /* Calibration must precede enabling the interrupt-only emulator. */
-  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
   {
     Error_Handler();
   }
