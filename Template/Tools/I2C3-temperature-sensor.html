@@ -116,6 +116,12 @@ differ from room temperature. The sensor starts with readings disabled.</p>
 <td>2 bytes</td>
 <td>Signed temperature in hundredths of a degree Celsius, most significant byte first. <code>0x8000</code> indicates an unavailable reading.</td>
 </tr>
+<tr>
+<td><code>0x02</code></td>
+<td>Read only</td>
+<td>1 byte</td>
+<td>WHOAMI: fixed device identity <code>0x26</code>. Available whether temperature readings are enabled or disabled. Writes are ignored.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="enable-or-disable-readings">Enable or disable readings</h3>
@@ -124,6 +130,18 @@ differ from room temperature. The sensor starts with readings disabled.</p>
 To disable readings, send <code>00 00</code> instead. Disabling readings does not remove
 the device from the bus: control reads remain available, and temperature reads
 return <code>80 00</code>.</p>
+<h3 id="read-whoami">Read WHOAMI</h3>
+<p>Select register <code>0x02</code> and read one byte from slave address
+<code>0x48</code>. The expected result is <code>0x26</code>. This read does not
+require enabling temperature readings and does not trigger an ADC conversion.</p>
+<pre><code class="language-text">START -&gt; 0x48 + WRITE -&gt; 0x02 -&gt; repeated START -&gt; 0x48 + READ
+      -&gt; 0x26 -&gt; NACK -&gt; STOP
+</code></pre>
+<p>The sensor ACKs the write address, register pointer, and read address. The
+master NACKs the single returned byte before STOP. A STOP between pointer
+selection and reading is also supported. Writing a value to WHOAMI leaves
+its identity unchanged. Reading beyond its one-byte size returns
+<code>FF</code>.</p>
 <h3 id="read-a-register">Read a register</h3>
 <p>A register read first writes a one-byte register pointer, then reads that
 register's data. For temperature, the transaction is:</p>
@@ -167,7 +185,7 @@ number and divide by 100 to obtain degrees Celsius.</p>
 </tr>
 </tbody>
 </table>
-<p>Registers do not auto-increment. Writes to the temperature register are ignored.
+<p>Registers do not auto-increment. Writes to the temperature and WHOAMI registers are ignored.
 Unknown registers return <code>FF</code>; bytes read beyond a register's defined size also
 return <code>FF</code>. An I2C transfer error is separate from the <code>80 00</code> value: the master
 must check whether the transfer succeeded before decoding the returned bytes.</p>

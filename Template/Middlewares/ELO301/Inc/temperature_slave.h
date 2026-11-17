@@ -48,6 +48,9 @@ extern "C" {
 #define TEMPERATURE_SLAVE_I2C_ADDR         0x48U
 #define TEMPERATURE_SLAVE_REG_CONTROL      0x00U
 #define TEMPERATURE_SLAVE_REG_TEMPERATURE  0x01U
+/* Read-only identity register, available even with readings disabled. */
+#define TEMPERATURE_SLAVE_REG_WHOAMI       0x02U
+#define TEMPERATURE_SLAVE_WHOAMI_VALUE     0x26U
 #define TEMPERATURE_SLAVE_UNAVAILABLE      0x8000U
 
 /*- PRIVATE_Definitions ------------------------------------------------------*/
